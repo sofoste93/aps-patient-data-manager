@@ -5,7 +5,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane prefHeight="852.0" prefWidth="786.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sofoste.apspatientdata.PatientFormController">
+<VBox xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.sofoste.apspatientdata.PatientFormController" style="-fx-background-color: #F0F0F0;">
+    <ImageView fitWidth="200" fitHeight="100">
+        <image>
+            <Image url="@/logo.png" preserveRatio="true" smooth="true"/>
+        </image>
+    </ImageView>
+<ScrollPane prefHeight="852.0" prefWidth="786.0">
     <AnchorPane prefHeight="829.0" prefWidth="784.0">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -39,3 +46,4 @@
     <ImageView fx:id="qrCodeImage" fitHeight="257.0" fitWidth="328.0" layoutX="415.0" layoutY="534.0" pickOnBounds="true" preserveRatio="true" />
 </AnchorPane>
 </ScrollPane>
+</VBox>
