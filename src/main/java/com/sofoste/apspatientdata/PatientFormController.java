@@ -73,7 +73,7 @@ public class PatientFormController implements Initializable {
     private void handleLanguageChangeAction(ActionEvent event) {
         MenuItem selectedLanguageMenu = (MenuItem) event.getSource();
         String languageCode = (String) selectedLanguageMenu.getUserData();
-        Locale locale = new Locale(languageCode);
+        Locale locale = Locale.forLanguageTag(languageCode);
         updateLanguage(String.valueOf(locale));
     }
 
@@ -100,9 +100,9 @@ public class PatientFormController implements Initializable {
     }
 
     private void updateLanguage(String languageCode) {
-        Locale locale = new Locale(languageCode);
+        Locale locale = new Locale.Builder().setLanguage(languageCode).build();
+        //ResourceBundle resources = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm", locale);
         ResourceBundle resources = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm", locale);
-        //ResourceBundle resources = ResourceBundle.getBundle("PatientForm", locale);
         System.out.println(resources.keySet());
         firstNameLabel.setText(resources.getString("firstName"));
         lastNameLabel.setText(resources.getString("lastName"));
@@ -138,8 +138,8 @@ public class PatientFormController implements Initializable {
             process.saveDataToJson(selectedLocale);
             clearForm();
 
-            Locale locale = new Locale(selectedLocale);
-            ResourceBundle bundle = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm",
+                    new Locale.Builder().setLanguage(selectedLocale).build());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(bundle.getString("formSubmissionTitle"));
             alert.setHeaderText(bundle.getString("formSubmissionHeader"));
