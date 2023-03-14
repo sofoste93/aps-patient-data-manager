@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200">
-    <circle cx="60" cy="60" r="50" fill="blue" />
-    <ellipse cx="60" cy="60" rx="70" ry="15" fill="red" />
-    <ellipse cx="60" cy="60" rx="70" ry="15" fill="red" transform="rotate(60 60 60)" />
-    <ellipse cx="60" cy="60" rx="70" ry="15" fill="red" transform="rotate(-60 60 60)" />
-    <text x="150" y="60" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="blue">Sofostech</text>
+    <circle cx="60" cy="60" r="50" fill="marron" />
+    <ellipse cx="60" cy="60" rx="70" ry="15" fill="dark" />
+    <ellipse cx="60" cy="60" rx="70" ry="15" fill="dark" transform="rotate(60 60 60)" />
+    <ellipse cx="60" cy="60" rx="70" ry="15" fill="dark" transform="rotate(-60 60 60)" />
+    <text x="150" y="60" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="darkgreen">Sofostech</text>
     <text x="150" y="90" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="red">APS</text>
     <text x="230" y="90" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="blue">Group</text>
-    <text x="150" y="130" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">The Free Spirit</text>
+    <text x="150" y="130" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="dark">The Free Spirit</text>
 </svg>

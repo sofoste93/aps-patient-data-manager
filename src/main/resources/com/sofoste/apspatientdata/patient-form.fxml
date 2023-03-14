@@ -9,7 +9,7 @@
       fx:controller="com.sofoste.apspatientdata.PatientFormController" style="-fx-background-color: #F0F0F0;">
     <ImageView fitWidth="200" fitHeight="100">
         <image>
-            <Image url="@/logo.png" preserveRatio="true" smooth="true"/>
+            <Image url="@/logo_dark.png" preserveRatio="true" smooth="true"/>
         </image>
     </ImageView>
 <ScrollPane prefHeight="852.0" prefWidth="786.0">
