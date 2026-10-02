@@ -37,9 +37,9 @@ jobs:
         shell: bash
         run: |
           mkdir -p target/jpackage-input dist
-          cp target/aps-patient-data-1.0.0-all.jar target/jpackage-input/app.jar
+          cp target/aps-patient-data-2.0.0-all.jar target/jpackage-input/app.jar
           java -jar target/jpackage-input/app.jar --version
-          jpackage --type app-image --name "APS Patient Data" --app-version "1.0.0" \
+          jpackage --type app-image --name "APS Patient Data" --app-version "2.0.0" \
             --vendor "Sofoste" --input target/jpackage-input --main-jar app.jar \
             --main-class com.sofoste.apspatientdata.Launcher --dest dist
 
@@ -81,8 +81,9 @@ jobs:
       - run: cd artifacts && sha256sum APS-Patient-Data-* > SHA256SUMS.txt
       - uses: softprops/action-gh-release@v2
         with:
-          name: APS Patient Data Manager 1.0.0 · Maintenance Edition
+          name: APS Patient Data Manager 2.0.0 · Neptune
           body: |
-            The repaired release of the original multilingual JavaFX patient form.
+            A calm blue-and-white redesign of the multilingual JavaFX patient form,
+            with clearer validation, local-data guidance and explicit QR consent.
             Each desktop package includes its own Java runtime.
           files: artifacts/*

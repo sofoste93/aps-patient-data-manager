@@ -15,14 +15,14 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Remove-Item -LiteralPath $dist -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -LiteralPath $inputDirectory -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path $dist, $inputDirectory -Force | Out-Null
-Copy-Item (Join-Path $root "target\aps-patient-data-1.0.0-all.jar") (Join-Path $inputDirectory "app.jar")
+Copy-Item (Join-Path $root "target\aps-patient-data-2.0.0-all.jar") (Join-Path $inputDirectory "app.jar")
 
 $jpackage = Join-Path $env:JAVA_HOME "bin\jpackage.exe"
 if (-not (Test-Path -LiteralPath $jpackage)) {
     $jpackage = (Get-Command jpackage -ErrorAction Stop).Source
 }
 
-& $jpackage --type app-image --name "APS Patient Data" --app-version "1.0.0" `
+& $jpackage --type app-image --name "APS Patient Data" --app-version "2.0.0" `
     --vendor "Sofoste" --input $inputDirectory --main-jar "app.jar" `
     --main-class "com.sofoste.apspatientdata.Launcher" --dest $dist
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

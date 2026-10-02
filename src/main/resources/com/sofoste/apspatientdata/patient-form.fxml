@@ -1,49 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.sofoste.apspatientdata.PatientFormController" style="-fx-background-color: #F0F0F0;">
-    <ImageView fitWidth="200" fitHeight="100">
-        <image>
-            <Image url="@/logo_dark.png" preserveRatio="true" smooth="true"/>
-        </image>
-    </ImageView>
-<ScrollPane prefHeight="852.0" prefWidth="786.0">
-    <AnchorPane prefHeight="829.0" prefWidth="784.0">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-    <Label fx:id="firstNameLabel" layoutX="53.0" layoutY="45.0" prefHeight="33.0" prefWidth="103.0" text="First name:" />
-    <Button fx:id="exitButton" layoutX="236.0" layoutY="729.0" onAction="#handleExitButtonAction" prefHeight="64.0" prefWidth="121.0" text="EXIT" />
-    <Label fx:id="lastNameLabel" layoutX="53.0" layoutY="112.0" prefHeight="33.0" prefWidth="103.0" text="Last name:" />
-    <TextField fx:id="firstName" alignment="CENTER" layoutX="172.0" layoutY="37.0" prefHeight="50.0" prefWidth="328.0" promptText="first name" />
-    <TextField fx:id="lastName" alignment="CENTER" layoutX="172.0" layoutY="104.0" prefHeight="50.0" prefWidth="328.0" promptText="last name" />
-    <TextField fx:id="age" alignment="CENTER" layoutX="172.0" layoutY="173.0" prefHeight="50.0" prefWidth="328.0" promptText="age" />
-    <Label fx:id="ageLabel" layoutX="53.0" layoutY="181.0" prefHeight="33.0" prefWidth="103.0" text="Your age:" />
-    <TextArea fx:id="allergy" layoutX="72.0" layoutY="247.0" prefHeight="97.0" prefWidth="328.0" promptText="Allergies" />
-    <TextArea fx:id="medications" layoutX="415.0" layoutY="247.0" prefHeight="97.0" prefWidth="328.0" promptText="Medications" />
-    <Label fx:id="allergyLabel" alignment="CENTER" layoutX="136.0" layoutY="352.0" prefHeight="33.0" prefWidth="200.0" text="Allergies" />
-    <Label fx:id="medicationLabel" alignment="CENTER" layoutX="479.0" layoutY="352.0" prefHeight="33.0" prefWidth="200.0" text="Medications" />
-    <TextArea fx:id="familyHistory" layoutX="72.0" layoutY="385.0" prefHeight="97.0" prefWidth="328.0" promptText="Family Medical History" />
-    <Label fx:id="familyHistoryLabel" alignment="CENTER" layoutX="136.0" layoutY="493.0" prefHeight="33.0" prefWidth="200.0" text="Family Medical History" />
-    <Label fx:id="surgicalHistoryLabel" alignment="CENTER" layoutX="479.0" layoutY="493.0" prefHeight="33.0" prefWidth="200.0" text="Surgical History" />
-    <TextArea fx:id="surgicalHistory" layoutX="415.0" layoutY="385.0" prefHeight="97.0" prefWidth="328.0" promptText="Surgical History" />
-    <Button fx:id="qrCodeButton" layoutX="236.0" layoutY="643.0" onAction="#handleQRCodeButtonAction" prefHeight="64.0" prefWidth="121.0" text="QR CODE" />
-    <Button fx:id="submitButton" layoutX="74.0" layoutY="729.0" onAction="#handleSubmitButtonAction" prefHeight="64.0" prefWidth="149.0" text="SUBMIT" />
-    <SplitMenuButton fx:id="selectLanguageMenu" layoutX="580.0" layoutY="33.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="164.0" text="SELECT LANGUAGE">
-        <items>
-            <MenuItem fx:id="englishMenu" mnemonicParsing="false" onAction="#handleLanguageChangeAction" text="ENGLISH" userData="en" />
-            <MenuItem fx:id="germanMenu" mnemonicParsing="false" onAction="#handleLanguageChangeAction" text="GERMAN" userData="de" />
-            <MenuItem fx:id="frenchMenu" mnemonicParsing="false" onAction="#handleLanguageChangeAction" text="FRENCH" userData="fr" />
-            <MenuItem fx:id="spanishMenu" mnemonicParsing="false" onAction="#handleLanguageChangeAction" text="SPANISH" userData="es" />
-        </items>
-    </SplitMenuButton>
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.sofoste.apspatientdata.PatientFormController"
+            prefWidth="1120" prefHeight="760" styleClass="app-shell">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="18" styleClass="app-header">
+            <padding><Insets top="18" right="28" bottom="18" left="28"/></padding>
+            <Label text="✚" styleClass="brand-mark"/>
+            <VBox spacing="2">
+                <Label text="APS PATIENT DATA" styleClass="brand-title"/>
+                <Label text="NEPTUNE · LOCAL CARE WORKSPACE" styleClass="brand-subtitle"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER_RIGHT" spacing="4">
+                <Label text="LOCAL MODE" styleClass="local-badge"/>
+                <Label text="No network transmission" styleClass="header-note"/>
+            </VBox>
+            <SplitMenuButton fx:id="selectLanguageMenu" text="LANGUAGE" styleClass="language-menu">
+                <items>
+                    <MenuItem fx:id="englishMenu" onAction="#handleLanguageChangeAction" text="English" userData="en"/>
+                    <MenuItem fx:id="germanMenu" onAction="#handleLanguageChangeAction" text="Deutsch" userData="de"/>
+                    <MenuItem fx:id="frenchMenu" onAction="#handleLanguageChangeAction" text="Français" userData="fr"/>
+                    <MenuItem fx:id="spanishMenu" onAction="#handleLanguageChangeAction" text="Español" userData="es"/>
+                </items>
+            </SplitMenuButton>
+        </HBox>
+    </top>
 
-    <ImageView fx:id="qrCodeImage" fitHeight="257.0" fitWidth="328.0" layoutX="415.0" layoutY="534.0" pickOnBounds="true" preserveRatio="true" />
-</AnchorPane>
-</ScrollPane>
-</VBox>
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="main-tabs">
+            <tabs>
+                <Tab fx:id="patientTab" text="Patient form">
+                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="workspace-scroll">
+                        <HBox alignment="TOP_CENTER" spacing="22" styleClass="workspace">
+                            <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
+
+                            <VBox spacing="15" prefWidth="355" styleClass="card">
+                                <Label fx:id="identityTitleLabel" text="Patient identity" styleClass="section-title"/>
+                                <Label text="Required information" styleClass="section-kicker"/>
+                                <Separator/>
+                                <Label fx:id="firstNameLabel" text="First name" styleClass="field-label"/>
+                                <TextField fx:id="firstName" promptText="e.g. Amelia" styleClass="input"/>
+                                <Label fx:id="lastNameLabel" text="Last name" styleClass="field-label"/>
+                                <TextField fx:id="lastName" promptText="e.g. Stone" styleClass="input"/>
+                                <Label fx:id="ageLabel" text="Age" styleClass="field-label"/>
+                                <TextField fx:id="age" promptText="0 – 130" styleClass="input"/>
+                                <Region VBox.vgrow="ALWAYS"/>
+                                <VBox spacing="6" styleClass="privacy-note">
+                                    <Label text="PRIVATE BY LOCATION" styleClass="privacy-note-title"/>
+                                    <Label fx:id="localHintLabel" text="Records stay in your local user folder." wrapText="true" styleClass="muted-text"/>
+                                </VBox>
+                            </VBox>
+
+                            <VBox spacing="14" prefWidth="650" HBox.hgrow="ALWAYS" styleClass="card">
+                                <Label fx:id="clinicalTitleLabel" text="Clinical overview" styleClass="section-title"/>
+                                <Label text="Optional notes for this profile" styleClass="section-kicker"/>
+                                <Separator/>
+                                <GridPane hgap="16" vgap="10">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                                    </columnConstraints>
+                                    <Label fx:id="allergyLabel" text="Allergies" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                    <Label fx:id="medicationLabel" text="Medication" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                    <TextArea fx:id="allergy" promptText="Known allergies or none" prefRowCount="3" wrapText="true" styleClass="clinical-area" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                    <TextArea fx:id="medications" promptText="Current medication or none" prefRowCount="3" wrapText="true" styleClass="clinical-area" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                    <Label fx:id="familyHistoryLabel" text="Family history" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                    <Label fx:id="surgicalHistoryLabel" text="Surgical history" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                    <TextArea fx:id="familyHistory" promptText="Relevant family history" prefRowCount="3" wrapText="true" styleClass="clinical-area" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                    <TextArea fx:id="surgicalHistory" promptText="Previous procedures" prefRowCount="3" wrapText="true" styleClass="clinical-area" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                </GridPane>
+
+                                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="qr-panel">
+                                    <ImageView fx:id="qrCodeImage" fitWidth="116" fitHeight="116" preserveRatio="true" smooth="false"/>
+                                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                        <Label fx:id="qrTitleLabel" text="Portable summary" styleClass="mini-title"/>
+                                        <Label fx:id="qrHelpLabel" text="A QR code contains the visible form data. Share it carefully." wrapText="true" styleClass="muted-text"/>
+                                        <CheckBox fx:id="qrConsent" text="I understand that the QR code exposes this information." wrapText="true"/>
+                                    </VBox>
+                                </HBox>
+
+                                <HBox alignment="CENTER_RIGHT" spacing="10">
+                                    <Button fx:id="exitButton" text="CLOSE" onAction="#handleExitButtonAction" styleClass="button-secondary"/>
+                                    <Button fx:id="qrCodeButton" text="CREATE QR" onAction="#handleQRCodeButtonAction" disable="true" styleClass="button-secondary"/>
+                                    <Button fx:id="submitButton" text="SAVE LOCALLY" onAction="#handleSubmitButtonAction" styleClass="button-primary"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </ScrollPane>
+                </Tab>
+
+                <Tab fx:id="helpTab" text="Privacy &amp; help">
+                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="workspace-scroll">
+                        <VBox spacing="18" maxWidth="860" styleClass="help-workspace">
+                            <padding><Insets top="30" right="35" bottom="35" left="35"/></padding>
+                            <Label fx:id="helpTitleLabel" text="Privacy and help" styleClass="page-title"/>
+                            <Label fx:id="helpIntroLabel" text="Understand where records are stored before entering sensitive information." wrapText="true" styleClass="page-intro"/>
+                            <VBox spacing="10" styleClass="card">
+                                <Label fx:id="storageTitleLabel" text="Local storage" styleClass="section-title"/>
+                                <Label fx:id="storageBodyLabel" text="Forms are saved as readable JSON files on this computer. They are not encrypted or uploaded." wrapText="true" styleClass="body-text"/>
+                                <Label fx:id="storagePathLabel" wrapText="true" styleClass="path-label"/>
+                                <Button fx:id="openFolderButton" text="OPEN DATA FOLDER" onAction="#handleOpenDataFolder" styleClass="button-secondary"/>
+                            </VBox>
+                            <VBox spacing="10" styleClass="card">
+                                <Label fx:id="qrPrivacyTitleLabel" text="QR-code safety" styleClass="section-title"/>
+                                <Label fx:id="qrPrivacyBodyLabel" text="The QR image contains the entered medical summary in plain text. Anyone who scans it can read that information." wrapText="true" styleClass="body-text"/>
+                            </VBox>
+                            <VBox spacing="10" styleClass="card">
+                                <Label text="APS PATIENT DATA · NEPTUNE 2.0.0" styleClass="section-title"/>
+                                <Label fx:id="aboutBodyLabel" text="An educational JavaFX project. It is not a certified medical device." wrapText="true" styleClass="body-text"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="status-bar">
+            <Label text="●" styleClass="status-dot"/>
+            <Label fx:id="statusLabel" text="READY · LOCAL WORKSPACE" styleClass="status-text"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="NEPTUNE / 2.0.0" styleClass="status-version"/>
+        </HBox>
+    </bottom>
+</BorderPane>

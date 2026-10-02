@@ -23,4 +23,4 @@ jobs:
       - run: mvn -B verify
       - name: Verify launcher version
         shell: bash
-        run: java -jar target/aps-patient-data-1.0.0-all.jar --version
+        run: java -jar target/aps-patient-data-2.0.0-all.jar --version

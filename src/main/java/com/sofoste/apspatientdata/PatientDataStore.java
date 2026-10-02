@@ -24,7 +24,11 @@ public final class PatientDataStore {
     private final Path dataDirectory;
 
     public PatientDataStore(Map<String, String> formData) {
-        this(formData, Path.of(System.getProperty("user.home"), ".aps-patient-data-manager", "data"));
+        this(formData, defaultDirectory());
+    }
+
+    public static Path defaultDirectory() {
+        return Path.of(System.getProperty("user.home"), ".aps-patient-data-manager", "data");
     }
 
     PatientDataStore(Map<String, String> formData, Path dataDirectory) {
