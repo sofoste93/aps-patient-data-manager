@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            asset: APS-Patient-Data-Windows-x64.zip
+          - os: ubuntu-latest
+            asset: APS-Patient-Data-Linux-x64.tar.gz
+          - os: macos-15-intel
+            asset: APS-Patient-Data-macOS-x64.tar.gz
+          - os: macos-14
+            asset: APS-Patient-Data-macOS-arm64.tar.gz
+    runs-on: ${{ matrix.os }}
+    env:
+      WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
+      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - run: mvn -B verify
+      - name: Prepare application image
+        shell: bash
+        run: |
+          mkdir -p target/jpackage-input dist
+          cp target/aps-patient-data-1.0.0-all.jar target/jpackage-input/app.jar
+          java -jar target/jpackage-input/app.jar --version
+          jpackage --type app-image --name "APS Patient Data" --app-version "1.0.0" \
+            --vendor "Sofoste" --input target/jpackage-input --main-jar app.jar \
+            --main-class com.sofoste.apspatientdata.Launcher --dest dist
+
+      - name: Sign Windows launcher when configured
+        if: ${{ runner.os == 'Windows' && env.WINDOWS_CERTIFICATE_BASE64 != '' }}
+        shell: pwsh
+        run: |
+          $certificate = Join-Path $env:RUNNER_TEMP "publisher.pfx"
+          [IO.File]::WriteAllBytes($certificate, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE_BASE64))
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" |
+            Sort-Object FullName -Descending | Select-Object -First 1
+          & $signtool.FullName sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 `
+            /f $certificate /p $env:WINDOWS_CERTIFICATE_PASSWORD "dist\APS Patient Data\APS Patient Data.exe"
+
+      - name: Archive Windows application
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Compress-Archive -LiteralPath "dist\APS Patient Data" -DestinationPath "dist\${{ matrix.asset }}"
+      - name: Archive Unix application
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "macOS" ]; then app="APS Patient Data.app"; else app="APS Patient Data"; fi
+          tar -C dist -czf "dist/${{ matrix.asset }}" "$app"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+          if-no-files-found: error
+
+  publish:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - run: cd artifacts && sha256sum APS-Patient-Data-* > SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: APS Patient Data Manager 1.0.0 · Maintenance Edition
+          body: |
+            The repaired release of the original multilingual JavaFX patient form.
+            Each desktop package includes its own Java runtime.
+          files: artifacts/*

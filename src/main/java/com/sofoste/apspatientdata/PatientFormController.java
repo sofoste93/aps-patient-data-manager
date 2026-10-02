@@ -3,107 +3,70 @@ package com.sofoste.apspatientdata;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class PatientFormController implements Initializable {
+public final class PatientFormController implements Initializable {
+    private static final String BUNDLE_NAME = "com.sofoste.apspatientdata.PatientForm";
 
-    @FXML
-    public MenuItem englishMenu;
-    @FXML
-    public MenuItem frenchMenu;
-    @FXML
-    public MenuItem germanMenu;
-    @FXML
-    public MenuItem spanishMenu;
-    @FXML
-    private TextField firstName;
-    @FXML
-    private TextField lastName;
-    @FXML
-    private TextField age;
-    @FXML
-    private TextArea allergy;
-    @FXML
-    private TextArea medications;
-    @FXML
-    private TextArea familyHistory;
-    @FXML
-    private TextArea surgicalHistory;
-    @FXML
-    private Label firstNameLabel;
-    @FXML
-    private Label lastNameLabel;
-    @FXML
-    private Label ageLabel;
-    @FXML
-    private Label allergyLabel;
-    @FXML
-    private Label medicationLabel;
-    @FXML
-    private Label familyHistoryLabel;
-    @FXML
-    private Label surgicalHistoryLabel;
-    @FXML
-    private Button submitButton;
-    @FXML
-    private Button exitButton;
-    @FXML
-    private Button qrCodeButton;
-    @FXML
-    private ImageView qrCodeImage;
-    @FXML
-    private SplitMenuButton selectLanguageMenu;
-    private String selectedLanguage;
-    private final Map<String, String> formData = new HashMap<>();
+    @FXML private MenuItem englishMenu;
+    @FXML private MenuItem frenchMenu;
+    @FXML private MenuItem germanMenu;
+    @FXML private MenuItem spanishMenu;
+    @FXML private TextField firstName;
+    @FXML private TextField lastName;
+    @FXML private TextField age;
+    @FXML private TextArea allergy;
+    @FXML private TextArea medications;
+    @FXML private TextArea familyHistory;
+    @FXML private TextArea surgicalHistory;
+    @FXML private Label firstNameLabel;
+    @FXML private Label lastNameLabel;
+    @FXML private Label ageLabel;
+    @FXML private Label allergyLabel;
+    @FXML private Label medicationLabel;
+    @FXML private Label familyHistoryLabel;
+    @FXML private Label surgicalHistoryLabel;
+    @FXML private Button submitButton;
+    @FXML private Button exitButton;
+    @FXML private Button qrCodeButton;
+    @FXML private ImageView qrCodeImage;
+    @FXML private SplitMenuButton selectLanguageMenu;
+
+    private String currentLanguage = "en";
+    private ResourceBundle resources;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setLanguage();
+    public void initialize(URL location, ResourceBundle ignored) {
+        applyLanguage(currentLanguage);
     }
+
     @FXML
     private void handleLanguageChangeAction(ActionEvent event) {
-        MenuItem selectedLanguageMenu = (MenuItem) event.getSource();
-        String languageCode = (String) selectedLanguageMenu.getUserData();
-        Locale locale = Locale.forLanguageTag(languageCode);
-        updateLanguage(String.valueOf(locale));
+        MenuItem selectedItem = (MenuItem) event.getSource();
+        applyLanguage(String.valueOf(selectedItem.getUserData()));
     }
 
+    private void applyLanguage(String languageCode) {
+        currentLanguage = PatientDataStore.normalizeLanguage(languageCode);
+        resources = ResourceBundle.getBundle(BUNDLE_NAME, Locale.forLanguageTag(currentLanguage));
+        selectLanguageMenu.setUserData(currentLanguage);
 
-
-    private void setLanguage() {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm", Locale.ENGLISH);
-        System.out.println(resourceBundle.keySet());
-        firstNameLabel.setText(resourceBundle.getString("firstName"));
-        lastNameLabel.setText(resourceBundle.getString("lastName"));
-        ageLabel.setText(resourceBundle.getString("age"));
-        allergyLabel.setText(resourceBundle.getString("allergy"));
-        medicationLabel.setText(resourceBundle.getString("medications"));
-        familyHistoryLabel.setText(resourceBundle.getString("familyHistory"));
-        surgicalHistoryLabel.setText(resourceBundle.getString("surgicalHistory"));
-        submitButton.setText(resourceBundle.getString("submit"));
-        exitButton.setText(resourceBundle.getString("exit"));
-        qrCodeButton.setText(resourceBundle.getString("qrCode"));
-        selectLanguageMenu.setText(resourceBundle.getString("selectLanguage"));
-        germanMenu.setText(resourceBundle.getString("de"));
-        englishMenu.setText(resourceBundle.getString("en"));
-        frenchMenu.setText(resourceBundle.getString("fr"));
-        spanishMenu.setText(resourceBundle.getString("es"));
-    }
-
-    private void updateLanguage(String languageCode) {
-        Locale locale = new Locale.Builder().setLanguage(languageCode).build();
-        //ResourceBundle resources = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm", locale);
-        ResourceBundle resources = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm", locale);
-        System.out.println(resources.keySet());
         firstNameLabel.setText(resources.getString("firstName"));
         lastNameLabel.setText(resources.getString("lastName"));
         ageLabel.setText(resources.getString("age"));
@@ -111,56 +74,60 @@ public class PatientFormController implements Initializable {
         medicationLabel.setText(resources.getString("medications"));
         familyHistoryLabel.setText(resources.getString("familyHistory"));
         surgicalHistoryLabel.setText(resources.getString("surgicalHistory"));
-
+        submitButton.setText(resources.getString("submit"));
         exitButton.setText(resources.getString("exit"));
         qrCodeButton.setText(resources.getString("qrCode"));
-        submitButton.setText(resources.getString("submit"));
         selectLanguageMenu.setText(resources.getString("selectLanguage"));
-        for (MenuItem item : selectLanguageMenu.getItems()) {
-            String langCode = (String) item.getUserData();
-            item.setText(resources.getString(langCode));
-        }
+        englishMenu.setText(resources.getString("en"));
+        germanMenu.setText(resources.getString("de"));
+        frenchMenu.setText(resources.getString("fr"));
+        spanishMenu.setText(resources.getString("es"));
     }
 
     @FXML
-    private void handleSubmitButtonAction(ActionEvent event) {
-        formData.put("firstName", firstName.getText());
-        formData.put("lastName", lastName.getText());
-        formData.put("age", age.getText());
-        formData.put("allergy", allergy.getText());
-        formData.put("medications", medications.getText());
-        formData.put("familyHistory", familyHistory.getText());
-        formData.put("surgicalHistory", surgicalHistory.getText());
+    private void handleSubmitButtonAction() {
+        Map<String, String> formData = collectFormData();
+        List<String> errors = PatientFormValidator.validate(formData);
+        if (!errors.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, resources.getString("validationTitle"),
+                    resources.getString("validationHeader"), String.join("\n", errors));
+            return;
+        }
 
-        Process process = new Process(formData);
         try {
-            String selectedLocale = (String) selectLanguageMenu.getUserData();
-            process.saveDataToJson(selectedLocale);
+            new PatientDataStore(formData).save(currentLanguage);
             clearForm();
-
-            ResourceBundle bundle = ResourceBundle.getBundle("com.sofoste.apspatientdata.PatientForm",
-                    new Locale.Builder().setLanguage(selectedLocale).build());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(bundle.getString("formSubmissionTitle"));
-            alert.setHeaderText(bundle.getString("formSubmissionHeader"));
-            alert.setContentText(bundle.getString("formSubmissionMessage"));
-            alert.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
+            showAlert(Alert.AlertType.INFORMATION, resources.getString("formSubmissionTitle"),
+                    resources.getString("formSubmissionHeader"), resources.getString("formSubmissionMessage"));
+        } catch (IOException exception) {
+            showAlert(Alert.AlertType.ERROR, resources.getString("saveErrorTitle"),
+                    resources.getString("saveErrorHeader"), exception.getMessage());
         }
     }
 
     @FXML
-    private void handleQRCodeButtonAction(ActionEvent event) {
-        String content = "First Name: " + firstName.getText() + "\n" +
-                "Last Name: " + lastName.getText() + "\n" +
-                "Age: " + age.getText() + "\n" +
-                "Allergies: " + allergy.getText() + "\n" +
-                "Medications: " + medications.getText() + "\n" +
-                "Family Medical History: " + familyHistory.getText() + "\n" +
-                "Surgical History: " + surgicalHistory.getText();
-
+    private void handleQRCodeButtonAction() {
+        Map<String, String> data = collectFormData();
+        String content = "First Name: " + data.get("firstName") + "\n"
+                + "Last Name: " + data.get("lastName") + "\n"
+                + "Age: " + data.get("age") + "\n"
+                + "Allergies: " + data.get("allergy") + "\n"
+                + "Medications: " + data.get("medications") + "\n"
+                + "Family Medical History: " + data.get("familyHistory") + "\n"
+                + "Surgical History: " + data.get("surgicalHistory");
         QRCodeGenerator.generateQRCode(content, qrCodeImage);
+    }
+
+    private Map<String, String> collectFormData() {
+        Map<String, String> data = new LinkedHashMap<>();
+        data.put("firstName", firstName.getText().trim());
+        data.put("lastName", lastName.getText().trim());
+        data.put("age", age.getText().trim());
+        data.put("allergy", allergy.getText().trim());
+        data.put("medications", medications.getText().trim());
+        data.put("familyHistory", familyHistory.getText().trim());
+        data.put("surgicalHistory", surgicalHistory.getText().trim());
+        return data;
     }
 
     private void clearForm() {
@@ -171,12 +138,19 @@ public class PatientFormController implements Initializable {
         medications.clear();
         familyHistory.clear();
         surgicalHistory.clear();
+        qrCodeImage.setImage(null);
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String header, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
-    private void handleExitButtonAction(ActionEvent event) {
-        Stage stage = (Stage) exitButton.getScene().getWindow();
-        stage.close();
+    private void handleExitButtonAction() {
+        ((Stage) exitButton.getScene().getWindow()).close();
     }
-
 }

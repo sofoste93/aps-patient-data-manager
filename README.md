@@ -1,44 +1,52 @@
-# Patient Medical Form
+# APS Patient Data Manager
 
-## aps-patient-data
-![overview_0](https://user-images.githubusercontent.com/28387985/225116471-1e9de0d0-00e7-4992-a08f-2500c165087d.PNG)
+[![CI](https://github.com/sofoste93/aps-patient-data-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/sofoste93/aps-patient-data-manager/actions/workflows/ci.yml)
+[![Java 17](https://img.shields.io/badge/Java-17-1769aa)](https://adoptium.net/)
 
-> This is a JavaFX application that allows users to fill out a form with their medical information and submit it. The application supports multiple languages, including English, French, German, and Spanish.
-![Languages](https://user-images.githubusercontent.com/28387985/225119859-a8d84a98-d3f9-4eb9-94ef-de1dce7b7312.png)
+A multilingual JavaFX form for recording a compact patient profile and
+generating a QR code. Version 1.0.0 is the repaired release of the original
+application.
 
-## Installation
-Clone the repository to your local machine.
-Open the project in your favorite Java IDE.
-Build the project and run the application.
-Usage
-Fill out the form with your medical information.
-Select the language you prefer from the language menu.
-Click the "Submit" button to save your data and clear the form.
-An alert will show up confirming your submission.
-Localization
-<hr>
-The application supports the following languages:
+![APS Patient Data Manager](https://user-images.githubusercontent.com/28387985/225116471-1e9de0d0-00e7-4992-a08f-2500c165087d.PNG)
 
->English (default)<br>
->French<br>
->German<br>
->Spanish <br><hr>
+## Download
 
->To add new languages or update the translations, modify the corresponding .properties files in the src/main/resources folder.
+Open the [latest release](https://github.com/sofoste93/aps-patient-data-manager/releases/latest)
+and choose the package for Windows, Linux, macOS Intel or macOS Apple Silicon.
+The Java runtime is included.
 
-![DE_German](https://user-images.githubusercontent.com/28387985/225120134-908ec399-d86a-4f53-98df-cdb9b6053afc.PNG)
-![ES_Spanish](https://user-images.githubusercontent.com/28387985/225120137-8bd2da8d-3b01-4dba-9a68-69514e42e47c.PNG)
-![FR_French](https://user-images.githubusercontent.com/28387985/225120139-c4335d49-c441-4650-9076-ade2826a0a90.PNG)
-<hr>
+## Features
 
-- QR Code to scan:
-![DE_QRCode](https://user-images.githubusercontent.com/28387985/225120393-c990dd61-2775-4ffa-b792-f68ded4d2346.PNG)
+- English, French, German and Spanish interfaces;
+- patient identity, allergies, medication and medical-history fields;
+- validation of required names and age;
+- local JSON records grouped by language;
+- QR-code preview for an explicitly entered profile;
+- no network transmission.
 
-- Data fetched from the QR Code:
-![Scanned_out](https://user-images.githubusercontent.com/28387985/225120730-12594e5b-521f-4860-bfe0-dc73e76fd3b1.jpeg)
+Records are written below the current user's home folder in
+`.aps-patient-data-manager/data`. They are plain JSON files. This educational
+application is not a medical device and should not be used for real sensitive
+health records without appropriate encryption, access control and compliance
+review.
 
-### Contributions
->
->| Contributions are welcome! Feel free to open a pull request or file an issue if you find a bug or have a feature request.<br>
->- Stephane Sob / sofoste93 (https://github.com/sofoste93/)
-> .
+## Run from source
+
+Requirements: JDK 17 and Maven 3.9 or newer.
+
+```bash
+mvn clean verify
+mvn javafx:run
+```
+
+The tests cover form validation, safe language filenames and repeated local
+saves. On Windows, `scripts\package.ps1` builds the standalone application.
+
+## Maintenance release
+
+The original project could not resolve one dependency and combined JavaFX 18,
+JavaFX 19 and Java 19 settings. Version 1.0.0 aligns the build on Java 17,
+removes unused libraries, fixes language selection and avoids partial JSON
+writes. The original sample data remains under `examples/`.
+
+Licensed under the [MIT License](LICENSE).

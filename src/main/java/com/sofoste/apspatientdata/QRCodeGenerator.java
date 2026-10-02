@@ -10,13 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.awt.image.BufferedImage;
-import java.util.Map;
-
-public class QRCodeGenerator {
-    private final Map<String, String> formData;
-
-    public QRCodeGenerator(Map<String, String> formData) {
-        this.formData = formData;
+public final class QRCodeGenerator {
+    private QRCodeGenerator() {
     }
 
     public static void generateQRCode(String content, ImageView imageView) {
@@ -26,8 +21,8 @@ public class QRCodeGenerator {
             BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             Image image = SwingFXUtils.toFXImage(bufferedImage, null);
             imageView.setImage(image);
-        } catch (WriterException e) {
-            e.printStackTrace();
+        } catch (WriterException exception) {
+            throw new IllegalArgumentException("The QR code could not be generated.", exception);
         }
     }
 
